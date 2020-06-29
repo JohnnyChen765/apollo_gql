@@ -1,0 +1,49 @@
+-Dans une query:
+query {
+    {
+        human(id: 1002) {
+            name
+            appearsIn
+            starships {
+                name
+            }
+        }
+    }
+}
+
+-> Chaque field peut-être vue comme une fonction qui retourne le prochain type
+-> On parle de resolver
+-> Seulement au premier niveau de la query ? FAUX
+-> Ex: considérons le field "name"
+    A ce stade, on considère qu'on a déjà l'obj "human",
+    s'il n'y a pas de resolver pour Human et son champs "human", comme par exemple:
+        Human: {
+            name: (obj, args, context, info) => "toto"
+        }
+        -> le resolver par défaut, qui accède à l'attribut "name" de l'obj "human" sera utilisé
+    S'il y a resolver, il sera appelé.
+
+--------------------------------------------------------------
+Apollo-client : est une lib côté front, qui permet de faire d'interface pour envoyer des query GQL
+au serveur GQL côté back
+
+--------------------------------------------------------------
+- UTILISATION DE useQuery, useMutation ect
+
+useQuery has a built-in pagination feature "fetchMore"
+--------------------------------------------------------------
+Apollo Client's useQuery fetch policy is cache-first, which means it checks the cache to see if the result is there before making a network request.
+{ fetchPolicy: "network-only" } to change it
+
+Querying local data from the Apollo cache is almost the same as querying remote data from a graph API.
+The only difference is that you add a @client directive to a local field to tell Apollo Client to pull it from the cache.
+--------------------------------------------------------------
+Adding virtual fields to server data:
+- check the "extend" keyword on schema.
+- need to use local resolver 
+- When querying cache data with @client : it checks first if local resolver,
+then check if the field is in the cache ?
+
+--------------------------------------------------------------
+For Apollo Client, it is the same whether the mutation is a local mutation on cache or a remote mutation on backend server
+Same syntax, except @client
